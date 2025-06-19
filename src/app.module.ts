@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { AuthEntity } from './auth/entities/auth.entity';
+import { ProductModule } from './product/product.module';
+import { JwtStrategy } from './utils/jwt.strategy';
+import { Product } from './product/entities/product.entity';
 
 @Module({
   imports: [
@@ -17,11 +20,13 @@ import { AuthEntity } from './auth/entities/auth.entity';
         username: configService.get<string>('POSTGRES_USERNAME'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DATABASE'),
-        entities: [AuthEntity],   
+        entities: [AuthEntity, Product],   
         synchronize: true, 
       }),
     }),
-    AuthModule, 
+    AuthModule,
+    ProductModule, 
   ],
+  providers:[JwtStrategy]
 })
 export class AppModule {}
